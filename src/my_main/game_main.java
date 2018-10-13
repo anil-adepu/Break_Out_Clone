@@ -1,5 +1,27 @@
 package my_main;
 
-public class game_main {
+import javax.swing.JFrame;
 
+public class game_main {
+	
+	public static final int WIDTH = 640 , HEIGHT = 480;
+	
+	public static void main( String[] args ) {
+		
+		JFrame theFrame =  new JFrame("MINIMUM_BREAK_OUT_GAME");
+
+		game_panel PanelObj = new game_panel();
+		
+		Thread ThreadObj = new Thread(PanelObj);
+		
+		theFrame.setSize(WIDTH , HEIGHT);
+		theFrame.setLocationRelativeTo(null);
+		theFrame.setResizable(false);
+		
+		theFrame.add(PanelObj);
+		ThreadObj.start();
+		
+		theFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		theFrame.setVisible(true);		
+	}
 }
