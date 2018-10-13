@@ -4,7 +4,7 @@ import javax.swing.JFrame;
 
 public class game_main {
 	
-	public static final int WIDTH = 640 , HEIGHT = 480;
+	public static final int WIDTH = 800 , HEIGHT = 560;
 	
 	public static void main( String[] args ) {
 		
