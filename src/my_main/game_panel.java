@@ -1,6 +1,7 @@
 package my_main;
 
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
@@ -23,13 +24,13 @@ public class game_panel extends JPanel implements Runnable {
 	private Graphics2D g;
 	private MyMouseMotionListener theMouseListener;
 	
-//	private int mousex;
+	private int mousex;
 	
 	//entities
 	private Ball theBall;
 	private Paddle thePaddle;
-	Map theMap;
-	//private HUD theHud;
+	private Map theMap;
+	private HUD theHud;
 //private ArrayList<PowerUp> powerUps;
 	
 	
@@ -41,13 +42,13 @@ public class game_panel extends JPanel implements Runnable {
 	}
 
 public void init() {
-	//mousex = 0;
+	mousex = 0;
 //	theBall = new Ball(200, 200, 1, 4, 20);
 	theBall = new Ball();
 	thePaddle = new Paddle();
 //	thePaddle = new Paddle(100, 20);
-	theMap = new Map(4, 8);
-	//theHud = new HUD();
+	theMap = new Map(8, 10);
+	theHud = new HUD();
 	theMouseListener = new MyMouseMotionListener();
 	//powerUps = new ArrayList<PowerUp>();
 	
@@ -94,8 +95,54 @@ public void init() {
 			 
 	}
 
+public void checkCollisions() {
+	
+	Rectangle ballRect = theBall.getRect();
+	Rectangle paddleRect = thePaddle.getRect();
+	
+	if(ballRect.intersects(paddleRect)) {
+		theBall.setDY(-theBall.getDY());
+	
+		if(theBall.getX() <  mousex + thePaddle.getWidth() / 4) {
+			theBall.setDX(theBall.getDX() -  2);
+		}
+
+		if(theBall.getX() >  mousex + thePaddle.getWidth() / 4 && theBall.getX() >  mousex + thePaddle.getWidth()) {
+			theBall.setDX(theBall.getDX() + 2 );
+		}
+
+
+	}
+
+//	int [][] theMapArray = theMap.getMapArray();
+	
+	A: for(int row = 0; row < theMap.getMapArray().length; row++) {
+		for( int col = 0; col < theMap.getMapArray()[0].length; col++) {
+	
+			if(theMap.getMapArray()[row][col] > 0) {
+				int brickx = col * theMap.getBrickWidth() + theMap.HOR_PAD;
+				int bricky = row * theMap.getBrickHeight() + theMap.VERT_PAD;
+				int brickWidth = theMap.getBrickWidth();
+				int brickHeight = theMap.getBrickHeight();
+			
+				Rectangle brickRect = new Rectangle(brickx, bricky, brickWidth, brickHeight);
+				
+				if(ballRect.intersects(brickRect)) {
+					theMap.setBrick(row, col, 0);
+					theBall.setDY(-theBall.getDY());
+
+					theHud.addScore(50);
+					break A;
+				}
+			}
+		}
+	}
+}
+
+
 public void update() {
 	
+	checkCollisions();
 	theBall.update();
 }
 	
@@ -109,7 +156,9 @@ private void draw() {
 	
 	thePaddle.draw(g);
 
-	//theMap.draw(g);
+	theMap.draw(g);
+	
+	theHud.draw(g);
 
 }
 
@@ -126,12 +175,12 @@ public void paintComponent(Graphics g) {
 	g2.dispose();
 } 
 
-private void display() {
+/*private void display() {
 	// TODO Auto-generated method stub
 	
 	
 }
-
+*/
 private class MyMouseMotionListener implements MouseMotionListener {
 
 	@Override
@@ -143,6 +192,7 @@ private class MyMouseMotionListener implements MouseMotionListener {
 	@Override
 	public void mouseMoved(MouseEvent e) {
 		// TODO Auto-generated method stub
+		mousex = e.getX();
 		thePaddle.mouseMoved(e.getX());	
 	}
 	

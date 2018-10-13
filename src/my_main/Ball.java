@@ -3,9 +3,11 @@ package my_main;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 
 public class Ball {
-
+	
+	//fields
 	private double x, y, dx, dy;
 	private int ballSize = 16;
 	
@@ -13,8 +15,8 @@ public class Ball {
 	
 	public Ball() {
 		
-		x = 200;
-		y = 200;
+		x = game_main.WIDTH/2;
+		y = game_main.HEIGHT/2;
 		dx = 1;
 		dy = 3;
 		
@@ -49,10 +51,26 @@ public class Ball {
 			
 			dy = -dy;
 		}
-		
-
-
 	}
+	
+	public Rectangle getRect() {
+		
+		return new Rectangle((int) x, (int) y, ballSize, ballSize);
+	}
+	
+	public double getDY() { return dy;	}	
+	
+	public void setDY(double theDY) {
+		dy = theDY;
+	}
+	
+	public double getDX() { return dx;	}
+	
+	public void setDX(double theDX) {
+		dx = theDX;
+	}
+	
+	public double getX() { return x;	}
 	
 	public void draw(Graphics2D g) {
 

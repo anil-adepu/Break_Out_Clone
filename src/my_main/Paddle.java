@@ -2,6 +2,7 @@ package my_main;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 
 public class Paddle {
 
@@ -33,10 +34,21 @@ public class Paddle {
 		g.fillRect( (int) x, YPOS, width, height);
 	}
 
+	
 	public void mouseMoved(int mouseXpos) {
 		x = mouseXpos;
+			if( x > game_main.WIDTH - width) {
+				x = game_main.WIDTH - width;
+			}
 	}
-	
+
+	public Rectangle getRect() {
+		
+		return new Rectangle((int) x, YPOS, width, height);
+	}
+
+	public int getWidth() { return width; }
+
 }
 
 
