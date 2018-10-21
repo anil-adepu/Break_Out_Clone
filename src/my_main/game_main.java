@@ -1,3 +1,5 @@
+// A simple clone of break out game using multi threading
+
 package my_main;
 
 import javax.swing.JFrame;
