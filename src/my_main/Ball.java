@@ -9,9 +9,9 @@ public class Ball {
 	
 	//fields
 	private double x, y, dx, dy;
-	private int ballSize = 16;
-	
-	
+	private double ballSize = 16;
+	private double initialSize;
+	private long ballSizeTimer;
 	
 	public Ball() {
 		
@@ -19,12 +19,16 @@ public class Ball {
 		y = game_main.HEIGHT/2;
 		dx = 1;
 		dy = 3;
-		
+		initialSize = 16;
 	}
 	
 	public void update() {
 		setPosition();
 		
+		if((System.nanoTime() - ballSizeTimer) / 1000 > 6000000 ) {
+			ballSize = initialSize;
+		}
+
 	}
 	
 	public void setPosition() {
@@ -55,15 +59,21 @@ public class Ball {
 	
 	public Rectangle getRect() {
 		
-		return new Rectangle((int) x, (int) y, ballSize, ballSize);
+		return new Rectangle((int) x, (int) y, (int) ballSize, (int) ballSize);
 	}
 	
 	public double getDY() { return dy;	}	
+	
+	public double getBallSize() { return ballSize;	}
 	
 	public void setDY(double theDY) {
 		dy = theDY;
 	}
 	
+	public void setY(double theY) {
+		y = theY;
+	}
+
 	public double getDX() { return dx;	}
 	
 	public void setDX(double theDX) {
@@ -77,7 +87,7 @@ public class Ball {
 		//g.setColor(Color.DARK_GRAY);
 		g.setStroke(new BasicStroke(4));
 		//g.drawOval((int) x,(int) y,(int) ballSize,(int) ballSize);
-		g.setColor(Color.BLUE);
+		g.setColor(Color.RED);
 		g.fillOval((int) x,(int) y,(int) ballSize,(int) ballSize);
 	} 
 
@@ -90,6 +100,16 @@ public class Ball {
 	   return loser;
 	}
 
+	public void alterBallSize(double theSize) {
+		ballSize = theSize;
+		setBallSizeTimer();
+	}
+	
+	public void setBallSizeTimer() {
+		ballSizeTimer = System.nanoTime();
+	}
+
+	
 }
 
 

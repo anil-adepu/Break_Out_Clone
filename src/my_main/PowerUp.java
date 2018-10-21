@@ -10,13 +10,14 @@ public class PowerUp {
 	private int x, y, dy, type, width, height;
 	
 	private boolean isOnScreen;
+	private boolean wasUsed;
 	
 	private Color color;
 	
 	public final static int WIDEPADDLE = 4;
 	public final static int FASTBALL = 5;
-	public final static Color WIDECOLOR = Color.CYAN;
-	public final static Color FASTCOLOR = Color.yellow;
+	public final static Color WIDECOLOR = Color.WHITE;
+	public final static Color FASTCOLOR = Color.WHITE;
 
 	//constructor
 	public PowerUp(int xStart, int yStart, int theType, int theWidth, int theHeight) {
@@ -35,11 +36,13 @@ public class PowerUp {
 		
 		dy = (int) (Math.random() * 6 + 1);
 		
+		wasUsed = false;
 	}
 	
 	public void draw(Graphics2D g) {
 		
 		g.setColor(color);
+		g.fillRect(x, y, width, height);
 	}
 
 	public void update() {
@@ -66,6 +69,10 @@ public class PowerUp {
 	public boolean getIsOnScreen() { return isOnScreen; }
 	
 	public void setIsOnScreen(boolean onScreen) { isOnScreen = onScreen; }
+
+	public boolean getWasUsed() { return wasUsed; }
+	
+	public void setWasUsed(boolean used) { wasUsed = used; }
 
 	public Rectangle getRect() {
 		

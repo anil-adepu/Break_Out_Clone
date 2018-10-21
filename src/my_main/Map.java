@@ -28,16 +28,17 @@ public class Map {
 		for(int i = 0; i < theMap.length; i++) {			
 			for(int j = 0; j < theMap[0].length; j++) {
 				
-	//			int r = (int) (Math.random() * 3 + 1);
+				int r = (int) (Math.random() * 3 + 1);
 //				System.out.print(r + "  " );
-				//theMap[i][j] = r;
-				theMap[i][j] = 1;
+				theMap[i][j] = r;
+	//			theMap[i][j] = 1;
 				
 			}
 		}
 		
-		theMap[3][2] = 4;
-		theMap[2][4] = 5;
+		theMap[3][1] = 4;	theMap[7][2] = 4;	theMap[7][6] = 4;	theMap[5][4] = 4;	
+		theMap[4][4] = 5;	theMap[7][5] = 5; 	theMap[5][4] = 5; 	theMap[6][8] = 5;
+		
 	}
 	
 	public void draw(Graphics2D g) {
@@ -48,22 +49,19 @@ public class Map {
 				
 				if(theMap[row][col] > 0) {
 				
-					/*if(theMap[row][col] == 1)
-						g.setColor(new Color(200,200,200));
+					if(theMap[row][col] == 1)
+						g.setColor(Color.DARK_GRAY);
 					if(theMap[row][col] == 2)
-						g.setColor(new Color(150,150,150));
+						g.setColor(Color.GREEN);
 					if(theMap[row][col] == 3)
-						g.setColor(new Color(100,100,100));
-					if(theMap[row][col] == 4)
-						g.setColor(new Color(50,50,50));
-					*/
-				
+						g.setColor(Color.BLUE);
+									
 					if(theMap[row][col] == PowerUp.FASTBALL)
 						g.setColor(PowerUp.FASTCOLOR);
 					if(theMap[row][col] == PowerUp.WIDEPADDLE)
 						g.setColor(PowerUp.WIDECOLOR);						
 					
-						if(row % 2 == 0)
+				/*	if(row % 2 == 0)
 						if(col % 2 == 0)	
 							g.setColor(Color.DARK_GRAY);
 						else
@@ -73,10 +71,10 @@ public class Map {
 							g.setColor(Color.BLUE);
 						else
 							g.setColor(Color.DARK_GRAY);
-				
+				*/
 					//g.fillRoundRect(col * (int) brickWidth + HOR_PAD, row * (int) brickHeight + VERT_PAD, (int) brickWidth, (int) brickHeight, 7,7);
 					g.fill3DRect(col * (int) brickWidth + HOR_PAD, row * (int) brickHeight + VERT_PAD, (int) brickWidth, (int) brickHeight, true);
-					g.setStroke(new BasicStroke(3));
+					g.setStroke(new BasicStroke(5));
 					g.setColor(Color.BLACK);
 					g.drawRoundRect(col * (int) brickWidth + HOR_PAD, row * (int) brickHeight + VERT_PAD, (int) brickWidth, (int) brickHeight , 7,7);				
 				}
