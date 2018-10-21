@@ -30,11 +30,11 @@ public class Paddle {
 	//draw
 	public void draw(Graphics2D g) {
 		
-		g.setColor(Color.DARK_GRAY);
-		g.fillRect( (int) x, YPOS, width, height);
+		g.setColor(Color.RED);
+		g.fill3DRect( (int) x, YPOS, width, height,false);
 	}
 
-	
+	//for restricting paddle movement to the edges
 	public void mouseMoved(int mouseXpos) {
 		x = mouseXpos;
 			if( x > game_main.WIDTH - width) {

@@ -3,6 +3,7 @@ package my_main;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+//import java.awt.Rectangle;
 
 public class Map {
 
@@ -18,20 +19,25 @@ public class Map {
 		initMap(row , col);
 		
 		brickWidth  = (game_main.WIDTH - 2 * HOR_PAD) / col;
-		brickHeight = ( game_main.HEIGHT / 2 - 1.5 * VERT_PAD ) /  row;
+		brickHeight = ( game_main.HEIGHT / 2 - 2 *  VERT_PAD ) /  row;
 	}
 
 	public void initMap(int row , int col) {
-		
 		theMap = new int[row][col];
-		
-		for(int i = 0; i < theMap.length; i++) {
-			
+
+		for(int i = 0; i < theMap.length; i++) {			
 			for(int j = 0; j < theMap[0].length; j++) {
 				
+	//			int r = (int) (Math.random() * 3 + 1);
+//				System.out.print(r + "  " );
+				//theMap[i][j] = r;
 				theMap[i][j] = 1;
+				
 			}
-		}	
+		}
+		
+		theMap[3][2] = 4;
+		theMap[2][4] = 5;
 	}
 	
 	public void draw(Graphics2D g) {
@@ -41,11 +47,38 @@ public class Map {
 			for(int col = 0; col < theMap[0].length; col++) {
 				
 				if(theMap[row][col] > 0) {
+				
+					/*if(theMap[row][col] == 1)
+						g.setColor(new Color(200,200,200));
+					if(theMap[row][col] == 2)
+						g.setColor(new Color(150,150,150));
+					if(theMap[row][col] == 3)
+						g.setColor(new Color(100,100,100));
+					if(theMap[row][col] == 4)
+						g.setColor(new Color(50,50,50));
+					*/
+				
+					if(theMap[row][col] == PowerUp.FASTBALL)
+						g.setColor(PowerUp.FASTCOLOR);
+					if(theMap[row][col] == PowerUp.WIDEPADDLE)
+						g.setColor(PowerUp.WIDECOLOR);						
+					
+						if(row % 2 == 0)
+						if(col % 2 == 0)	
+							g.setColor(Color.DARK_GRAY);
+						else
+						g.setColor(Color.GREEN);
+					else
+						if(col % 2 == 0)	
+							g.setColor(Color.BLUE);
+						else
+							g.setColor(Color.DARK_GRAY);
+				
+					//g.fillRoundRect(col * (int) brickWidth + HOR_PAD, row * (int) brickHeight + VERT_PAD, (int) brickWidth, (int) brickHeight, 7,7);
+					g.fill3DRect(col * (int) brickWidth + HOR_PAD, row * (int) brickHeight + VERT_PAD, (int) brickWidth, (int) brickHeight, true);
+					g.setStroke(new BasicStroke(3));
 					g.setColor(Color.BLACK);
-					g.fillRoundRect(col * (int) brickWidth + HOR_PAD, row * (int) brickHeight + VERT_PAD, (int) brickWidth, (int) brickHeight, 10, 10);
-					g.setStroke(new BasicStroke(1));
-					g.setColor(Color.CYAN);
-					g.drawRoundRect(col * (int) brickWidth + HOR_PAD, row * (int) brickHeight + VERT_PAD, (int) brickWidth, (int) brickHeight , 10,10);				
+					g.drawRoundRect(col * (int) brickWidth + HOR_PAD, row * (int) brickHeight + VERT_PAD, (int) brickWidth, (int) brickHeight , 7,7);				
 				}
 			}
 		}
@@ -59,5 +92,31 @@ public class Map {
 	
 	public int getBrickWidth() { return (int) brickWidth; }
 	public int getBrickHeight() { return (int) brickHeight; }
+	
+	public void hitBrick(int row, int col) {
+		theMap[row][col] -= 1;
+		if(theMap[row][col] < 0)
+			theMap[row][col] = 0;
+	}
+	
+	
+	public boolean checkWin() {
+		boolean IsWin = false;
+		
+		int RemBricks = 0;
+		for(int row = 0 ; row < theMap.length ; row++) {
+			for(int col = 0 ; col < theMap[0].length ; col++) {
+				
+				RemBricks += theMap[row][col];
+			}
+		}
+	
+		if(RemBricks == 0)
+			IsWin = true;
+	
+		return IsWin;
+	}
+	
+	
 
 }

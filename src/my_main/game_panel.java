@@ -1,3 +1,4 @@
+
 package my_main;
 
 import java.awt.Graphics2D;
@@ -8,14 +9,16 @@ import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 //import java.util.ArrayList;
 import java.awt.Color;
+import java.awt.Font;
+
 import javax.swing.JPanel;
 
 import java.awt.Graphics;
 //import java.awt.event.*;
+
+
 public class game_panel extends JPanel implements Runnable {
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 1L;
 
 	//Fields
@@ -32,8 +35,7 @@ public class game_panel extends JPanel implements Runnable {
 	private Map theMap;
 	private HUD theHud;
 //private ArrayList<PowerUp> powerUps;
-	
-	
+		
 	//constructor
 	public game_panel() {
 	
@@ -43,11 +45,9 @@ public class game_panel extends JPanel implements Runnable {
 
 public void init() {
 	mousex = 0;
-//	theBall = new Ball(200, 200, 1, 4, 20);
 	theBall = new Ball();
 	thePaddle = new Paddle();
-//	thePaddle = new Paddle(100, 20);
-	theMap = new Map(8, 10);
+	theMap = new Map(3,4);
 	theHud = new HUD();
 	theMouseListener = new MyMouseMotionListener();
 	//powerUps = new ArrayList<PowerUp>();
@@ -61,7 +61,7 @@ public void init() {
 	g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 	
 }
-	
+
 	@Override
 	public void run() {
 		// this is the main game loop called by the thread in game_main class over and over
@@ -73,8 +73,7 @@ public void init() {
 			e.printStackTrace();
 		}*/
 
-		while(running) {
-			
+		while(running == true) {
 
 			//update
 			update();
@@ -90,13 +89,10 @@ public void init() {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-				
 		}
-			 
 	}
 
 public void checkCollisions() {
-	
 	Rectangle ballRect = theBall.getRect();
 	Rectangle paddleRect = thePaddle.getRect();
 	
@@ -104,21 +100,18 @@ public void checkCollisions() {
 		theBall.setDY(-theBall.getDY());
 	
 		if(theBall.getX() <  mousex + thePaddle.getWidth() / 4) {
-			theBall.setDX(theBall.getDX() -  2);
+			theBall.setDX(theBall.getDX() -  1.5);
 		}
 
-		if(theBall.getX() >  mousex + thePaddle.getWidth() / 4 && theBall.getX() >  mousex + thePaddle.getWidth()) {
-			theBall.setDX(theBall.getDX() + 2 );
+		if(theBall.getX() <  mousex + thePaddle.getWidth() && theBall.getX() >  mousex + thePaddle.getWidth() / 4) {
+			theBall.setDX(theBall.getDX() +  1.5 );
+        //		theBall.setDX(-theBall.getDX());
 		}
-
-
 	}
 
-//	int [][] theMapArray = theMap.getMapArray();
-	
-	A: for(int row = 0; row < theMap.getMapArray().length; row++) {
-		for( int col = 0; col < theMap.getMapArray()[0].length; col++) {
-	
+	A: for( int row = 0; row < theMap.getMapArray().length; row++ ) {
+		for( int col = 0; col < theMap.getMapArray()[0].length; col++ ) {
+			
 			if(theMap.getMapArray()[row][col] > 0) {
 				int brickx = col * theMap.getBrickWidth() + theMap.HOR_PAD;
 				int bricky = row * theMap.getBrickHeight() + theMap.VERT_PAD;
@@ -127,11 +120,13 @@ public void checkCollisions() {
 			
 				Rectangle brickRect = new Rectangle(brickx, bricky, brickWidth, brickHeight);
 				
-				if(ballRect.intersects(brickRect)) {
+				if(ballRect.intersects(brickRect))  {
 					theMap.setBrick(row, col, 0);
+					//theMap.hitBrick(row, col);
+					
 					theBall.setDY(-theBall.getDY());
-
-					theHud.addScore(50);
+//					if(theMap.getMapArray()[row][col] == 0)
+						theHud.addScore(50);
 					break A;
 				}
 			}
@@ -139,6 +134,7 @@ public void checkCollisions() {
 	}
 }
 
+//theMap.checkMap();
 
 public void update() {
 	
@@ -148,7 +144,7 @@ public void update() {
 	
 private void draw() {
 	// draws the background of the image in g object 
-	g.setColor(Color.WHITE);
+	g.setColor(Color.BLACK);
 	
 	g.fillRect(0, 0, game_main.WIDTH, game_main.HEIGHT);
 	
@@ -157,23 +153,41 @@ private void draw() {
 	thePaddle.draw(g);
 
 	theMap.draw(g);
-	
+		
 	theHud.draw(g);
+	
+	if(theMap.checkWin() == true) {
+		printWin();
+		running = false;
+	}	
 
+	if(theBall.YouLose() == true) {
+		running = false;
+		printLose();
+	}
 }
 
+	private void printWin() {
+		g.setColor(Color.ORANGE);
+		g.setFont(new Font("Courier New",Font.BOLD,30));
+		g.drawString("YOU WIN !!", 310 , 270);
+	}
+
+	private void printLose() {
+		g.setColor(Color.RED);
+		g.setFont(new Font("Courier New",Font.BOLD,30));
+		g.drawString("YOU LOSE :(", 310 , 270);
+	}
+
+	//paintComponent is an inbuilt fn. which is overridden here
 public void paintComponent(Graphics g) {
 
 	Graphics2D g2 = (Graphics2D) g;
-			
-	//g2.setColor(Color.BLACK);
 	
-	//g2.fillOval(20, 20, 20, 60);
- 	
 	g2.drawImage(image, 0, 0, game_main.WIDTH, game_main.HEIGHT, null);
 	
 	g2.dispose();
-} 
+}
 
 /*private void display() {
 	// TODO Auto-generated method stub
@@ -181,6 +195,7 @@ public void paintComponent(Graphics g) {
 	
 }
 */
+
 private class MyMouseMotionListener implements MouseMotionListener {
 
 	@Override
@@ -195,9 +210,9 @@ private class MyMouseMotionListener implements MouseMotionListener {
 		mousex = e.getX();
 		thePaddle.mouseMoved(e.getX());	
 	}
-	
 }
 
 
 
 }
+

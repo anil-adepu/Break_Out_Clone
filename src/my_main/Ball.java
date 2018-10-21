@@ -74,10 +74,23 @@ public class Ball {
 	
 	public void draw(Graphics2D g) {
 
-		g.setColor(Color.DARK_GRAY);
+		//g.setColor(Color.DARK_GRAY);
 		g.setStroke(new BasicStroke(4));
-		g.drawOval((int) x,(int) y,(int) ballSize,(int) ballSize);
+		//g.drawOval((int) x,(int) y,(int) ballSize,(int) ballSize);
+		g.setColor(Color.BLUE);
+		g.fillOval((int) x,(int) y,(int) ballSize,(int) ballSize);
 	} 
+
+	public boolean YouLose() {
+		boolean loser = false;
+		
+		if(y > game_main.HEIGHT - 50)
+			loser = true;
+
+	   return loser;
+	}
+
 }
+
 
 
