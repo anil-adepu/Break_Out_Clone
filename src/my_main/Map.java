@@ -49,12 +49,12 @@ public class Map {
 				
 				if(theMap[row][col] > 0) {
 				
-					if(theMap[row][col] == 1)
+					if(theMap[row][col] == 3)
 						g.setColor(Color.DARK_GRAY);
 					if(theMap[row][col] == 2)
-						g.setColor(Color.GREEN);
-					if(theMap[row][col] == 3)
-						g.setColor(Color.BLUE);
+						g.setColor(Color.CYAN);
+					if(theMap[row][col] == 1)
+						g.setColor(Color.WHITE);
 									
 					if(theMap[row][col] == PowerUp.FASTBALL)
 						g.setColor(PowerUp.FASTCOLOR);

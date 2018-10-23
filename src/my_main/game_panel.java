@@ -89,14 +89,59 @@ public void init() {
 
 		while(running == true) {
 
+		
+			Thread T1 = new Thread(new Runnable( ) {
+				@Override
+				public void run() {
+					update();					
+					//checkCollisions();
+				}
+			});
+			
+			Thread T2 = new Thread(new Runnable( ) {
+				@Override
+				public void run() {
+					draw();
+				}
+			});
+			
+			Thread T3 = new Thread(new Runnable( ) {
+				@Override
+				public void run() {
+					repaint();
+				}
+			});
+			
 			//update
-			update();
+//			update();
+	
 			
 			// render or draw
-			draw();
+//			draw();
 			
 			//display
-			repaint();
+//			repaint();
+	
+			T1.start();
+			try {
+				T1.join();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			T2.start();
+			try {
+				T2.join();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			T3.start();
+			try {
+				T3.join();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			
 			try {
 				Thread.sleep(12);
@@ -165,6 +210,7 @@ public void checkCollisions() {
 					if(theMap.getMapArray()[row][col] ==1 ) {
 						ScreenShakeActive = true;
 						screenShakeTimer = System.nanoTime();
+						//playSound("file:./resources/fasak.wav",0);
 						playSound("file:./resources/brick_break.wav",0);
 					}
 					
@@ -178,7 +224,7 @@ public void checkCollisions() {
 						theMap.setBrick(row, col, 0);
 					}
 					else {
-						theMap.hitBrick(row, col);
+						theMap.setBrick(row, col,0);
 					}
 
 					//theMap.hitBrick(row, col);
@@ -196,11 +242,42 @@ public void checkCollisions() {
 //theMap.checkMap();
 
 public void update() {
-	
-	checkCollisions();
-	theBall.update();
 
-	thePaddle.update();
+	//checkCollisions();
+	//theBall.update();
+	//thePaddle.update();
+	
+	Thread t1 = new Thread(new Runnable( ) {
+		@Override
+		public void run() {
+			checkCollisions();
+		}
+	});
+	Thread t2 = new Thread(new Runnable( ) {
+		@Override
+		public void run() {
+			theBall.update();
+		}
+	});
+
+	Thread t3 = new Thread(new Runnable( ) {
+		@Override
+		public void run() {
+			thePaddle.update();
+		}
+	});
+
+	t1.start();
+	t2.start();
+	t3.start();	
+	
+	try {
+		t1.join();
+		t2.join();
+		t3.join();
+	} catch(Exception e) {
+		e.printStackTrace();
+	}
 	
 	for(PowerUp pu : powerUps) {
 		pu.update();
@@ -209,34 +286,100 @@ public void update() {
 	if(((System.nanoTime() - screenShakeTimer) / 1000000 > 300) && ScreenShakeActive) {
 		ScreenShakeActive = false;
 	}
-	
+
 }
 	
 private void draw() {
 	// draws the background of the image in g object 
-	g.setColor(Color.BLACK);
-	
-	g.fillRect(0, 0, game_main.WIDTH, game_main.HEIGHT);
-	
-	theBall.draw(g);
-	
-	thePaddle.draw(g);
-
-	theMap.draw(g);
+		g.setColor(Color.BLACK);
 		
-	theHud.draw(g);
-	
-	drawPowerUps();
-	
-	if(theMap.checkWin() == true) {
-		printWin();
-		running = false;
-	}	
+		g.fillRect(0, 0, game_main.WIDTH, game_main.HEIGHT);
 
-	if(theBall.YouLose() == true) {
-		running = false;
-		printLose();
-	}
+		//theBall.draw(g);
+		//thePaddle.draw(g);
+		//theMap.draw(g);
+		//theHud.draw(g);
+		//drawPowerUps();
+		
+		Thread t4 = new Thread(new Runnable( ) {
+			@Override
+			public void run() {
+				theBall.draw(g);
+			}
+		});
+		
+		Thread t5 = new Thread(new Runnable( ) {
+			@Override
+			public void run() {
+				thePaddle.draw(g);
+			}
+		});
+		
+		Thread t6 = new Thread(new Runnable( ) {
+			@Override
+			public void run() {
+				theMap.draw(g);
+			}
+		});
+		
+		Thread t7 = new Thread(new Runnable( ) {
+			@Override
+			public void run() {
+				theHud.draw(g);
+			}
+		});
+		
+		Thread t8 = new Thread(new Runnable( ) {
+			@Override
+			public void run() {
+				drawPowerUps();
+			}
+		});
+		
+		t4.start();
+		try {
+			t4.join();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		t5.start();
+		try {
+			t5.join();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		t6.start();
+		try {
+			t6.join();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		t7.start();
+		try {
+			t7.join();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		t8.start();	
+		try {
+			t8.join();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		if(theMap.checkWin() == true) {
+			printWin();
+			running = false;
+		}	
+
+		if(theBall.YouLose() == true) {
+			running = false;
+			printLose();
+		}
 }
 
 	private void printWin() {

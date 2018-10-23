@@ -10,7 +10,7 @@ public class game_main {
 	
 	public static void main( String[] args ) {
 		
-		JFrame theFrame =  new JFrame("MINIMUM_BREAK_OUT_GAME");
+		JFrame theFrame =  new JFrame("FASAK_BREAK_OUT_GAME");
 
 		game_panel PanelObj = new game_panel();
 		

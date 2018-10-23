@@ -16,8 +16,8 @@ public class PowerUp {
 	
 	public final static int WIDEPADDLE = 4;
 	public final static int FASTBALL = 5;
-	public final static Color WIDECOLOR = Color.WHITE;
-	public final static Color FASTCOLOR = Color.WHITE;
+	public final static Color WIDECOLOR = Color.BLUE;
+	public final static Color FASTCOLOR = Color.BLUE;
 
 	//constructor
 	public PowerUp(int xStart, int yStart, int theType, int theWidth, int theHeight) {
